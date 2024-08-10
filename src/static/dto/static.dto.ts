@@ -12,7 +12,7 @@ export class MostPlayedDto {
   name: string;
 
   @ApiProperty({
-    description: "Today's price for this game",
+    description: '이 게임의 오늘 가격',
     example: 'Free To Play',
   })
   price: string;
@@ -51,19 +51,19 @@ export class TopSellerDto {
   name: string;
 
   @ApiProperty({
-    description: "Today's price for this game",
+    description: '이 게임의 오늘 가격',
     example: '-60%\n₩ 21,500\n₩ 8,600',
   })
   price: string;
 
   @ApiProperty({
-    description: 'Change in rank compared to previous week',
+    description: '이전 주와 비교한 순위 변화',
     example: '▲ 17',
   })
   change: string;
 
   @ApiProperty({
-    description: 'Number of weeks in top 100',
+    description: '탑 100에 머문 주 수',
     example: '376',
   })
   weeks: string;
@@ -225,7 +225,7 @@ export class TopGamesOwnerDto {
 
   @ApiProperty({
     description: '계층',
-    type: [LadderDto], // 배열의 항목 타입을 지정합니다.
+    type: [LadderDto],
   })
   ladder: LadderDto[];
 }
