@@ -87,7 +87,6 @@ export class StaticService {
           .get(url, { headers }) // URL과 헤더 설정
           .pipe(map((response: AxiosResponse) => response.data)),
       );
-
       return response;
     } catch (error) {
       this.logger.error('Steam API 요청 실패:', error.message);

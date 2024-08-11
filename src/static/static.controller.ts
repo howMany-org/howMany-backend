@@ -12,7 +12,7 @@ import {
   TopGamesOwnerDto,
   TopPlayTimeUserDto,
   TopSellerDto,
-} from './dto';
+} from './dto/static.dto';
 
 @Controller('api/v1/static')
 @ApiTags('static API')

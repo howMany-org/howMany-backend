@@ -10,7 +10,7 @@ async function bootstrap() {
     .setDescription(
       '스팀 게임 플레이타임 불러오기, 게임성향 테스트를 통한 게임 추천 등의 기능이 있는 웹사이트',
     )
-    .setVersion('1.0.0')
+    .setVersion('2.0.0')
     .addTag('swagger')
     .build();
 
