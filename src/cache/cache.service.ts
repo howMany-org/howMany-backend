@@ -24,4 +24,9 @@ export class CacheService {
       delete this.memoryData[key];
     }, ttl * 1000);
   }
+
+  // 전체 캐시 메모리 조회
+  public getAll(): Record<string, string> {
+    return this.memoryData;
+  }
 }
