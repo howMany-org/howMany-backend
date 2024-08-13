@@ -8,7 +8,6 @@ export class CacheController {
   @Get('inspect')
   async inspectCache() {
     const allCacheData = this.cacheService.getAll();
-    console.log('Current cache data:', allCacheData);
     return allCacheData;
   }
 }
