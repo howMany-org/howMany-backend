@@ -96,4 +96,10 @@ export class ScraperController {
     const charts = await this.scraperService.scrapTopSellerCharts(region);
     return charts;
   }
+
+  @Get('broadcasts')
+  async scrapBroadcasts() {
+    const broadcasts = await this.scraperService.scrapBroadcasts();
+    return broadcasts;
+  }
 }
