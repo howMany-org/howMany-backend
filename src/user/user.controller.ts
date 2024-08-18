@@ -3,11 +3,12 @@ import { UserService } from './user.service';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import {
-  ApiConflictResponse,
-  ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { ProfileDto } from './dto/\bprofile.dto';
 
 @Controller('api/v1/user')
 @ApiTags('user API')
@@ -18,29 +19,54 @@ export class UserController {
     summary: '로그인 API',
     description: '스팀 auth를 이용한 로그인',
   })
-  @ApiCreatedResponse({ description: '사용자 생성 완료' })
-  @ApiConflictResponse({ description: '중복된 항목이 존재' })
   @Get('login')
   @UseGuards(AuthGuard('steam'))
   async steamLogin() {
     // Passport가 자동으로 리디렉션합니다.
   }
 
-  @Get('return')
-  @UseGuards(AuthGuard('steam'))
-  steamReturn(@Req() req: Request, @Res() res: Response) {
-    res.redirect('/steam');
-  }
-
-  @Get('')
-  root(@Res() res: Response) {
-    res.send('Hello World!'); // 기본 라우트 핸들러
-  }
-
-  @Get('userinfo')
-  async getUserInfo(@Query('id') id: string) {
-    const games = await this.userService.getOwnedGames(id);
+  // 사용자 정보 및 게임 정보 조회
+  @ApiOperation({
+    summary: 'getUserInfo API',
+    description: '사용자의 프로필 정보와 소유 게임 목록을 조회하는 API',
+  })
+  @ApiOkResponse({
+    description: 'OK',
+    type: ProfileDto,
+  })
+  @ApiQuery({
+    name: 'id',
+    description: 'user의 id정보',
+    required: true,
+    type: 'string',
+  })
+  @Get('profile')
+  async getProfile(@Query('id') id: string) {
     const user = await this.userService.getPlayerSummaries(id);
-    return { games, user };
+    const games = await this.userService.getOwnedGames(id);
+
+    return { user, games };
+  }
+
+  // 사용자 정보 및 게임 정보 조회
+  @ApiOperation({
+    summary: 'getUserInfo API',
+    description: '사용자의 rank 정보를 불러오는 API',
+  })
+  @ApiOkResponse({
+    description: 'OK',
+    type: ProfileDto,
+  })
+  @ApiQuery({
+    name: 'id',
+    description: 'user의 id정보',
+    required: true,
+    type: 'string',
+  })
+  @Get('rank')
+  async getUserRank(@Query('id') id: string) {
+    const ranks = await this.userService.getUserRank(id);
+
+    return { ranks };
   }
 }
