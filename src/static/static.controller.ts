@@ -105,4 +105,45 @@ export class StaticContoller {
   ) {
     return await this.staticService.getTopGamesOwner(regionOrCountryCode);
   }
+
+  @ApiOperation({
+    summary: 'broadcasts API',
+    description: '현재 방송정보를 가져오는 API',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description: 'OK',
+    schema: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          broadcastLink: {
+            type: 'string',
+            description: '방송의 링크',
+          },
+          viewers: {
+            type: 'string',
+            description: '현재 시청자 수',
+          },
+          title: {
+            type: 'string',
+            description: '방송 제목',
+          },
+          streamerInfo: {
+            type: 'string',
+            description: '스트리머의 이름',
+          },
+          streamerInfoLink: {
+            type: 'string',
+            description: '스트리머의 프로필 링크',
+          },
+        },
+      },
+    },
+  })
+  @Get('broadcasts')
+  async getBroadcasts() {
+    return await this.staticService.getBroadcasts();
+  }
 }
