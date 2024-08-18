@@ -6,6 +6,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { MbtiModule } from './mbti/mbti.module';
 import { ConfigModule } from '@nestjs/config';
 import config from './config/configuration'; // 설정 모듈 불러오기
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import config from './config/configuration'; // 설정 모듈 불러오기
     StaticModule,
     ScraperModule,
     MbtiModule,
+    UserModule,
   ],
 })
 export class AppModule {}
