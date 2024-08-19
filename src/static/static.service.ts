@@ -90,10 +90,8 @@ export class StaticService {
         totalPlaytime: item.steam_stats.games.total_playtime_min,
       }));
 
-      const charts: TopPlayTimeUserDto[] = JSON.parse(filteredData);
-
       // 차트 항목 개수를 필터링
-      return charts.slice(0, limit);
+      return filteredData.slice(0, limit);
     } catch (error) {
       console.error('Steam API 요청 실패:', error);
       throw error;
@@ -130,10 +128,8 @@ export class StaticService {
         totalGames: item.steam_stats.games.total_games,
       }));
 
-      const charts: TopGamesOwnerDto[] = JSON.parse(filteredData);
-
       // 차트 항목 개수를 필터링
-      return charts.slice(0, limit);
+      return filteredData.slice(0, limit);
     } catch (error) {
       this.logger.error('Steam API 요청 실패:', error.message);
       throw error;
