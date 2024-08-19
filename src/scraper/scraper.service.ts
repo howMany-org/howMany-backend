@@ -91,20 +91,17 @@ export class ScraperService {
         return Array.from(rows).map((row) => {
           const columns = row.querySelectorAll('td');
 
-          // 이미지 URL 추출
-          let imageUrl = '';
-          const imgElement = columns[2].querySelector(
-            'a > img',
-          ) as HTMLImageElement; // 이미지가 있는 <a> 내부의 <img> 태그를 찾음
-          if (imgElement) {
-            imageUrl = imgElement.src;
-          }
-
           // 링크와 텍스트 추출
-          const linkElement = columns[2].querySelector(
+          const gameElement = columns[2].querySelector(
             'a',
           ) as HTMLAnchorElement;
-          const linkHref = linkElement ? linkElement.href : null;
+          const gameUrl = gameElement ? gameElement.href : null;
+
+          // 링크에서 앱 ID 추출 (정규 표현식 사용)
+          const appIdMatch = gameUrl ? gameUrl.match(/\/app\/(\d+)/) : null;
+          const appId = appIdMatch ? appIdMatch[1] : null;
+
+          const imageUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/header.jpg?t=1723514356`;
 
           return {
             rank: columns[1].innerText.trim(),
@@ -112,8 +109,8 @@ export class ScraperService {
             price: columns[3].innerText.trim(),
             currentPlayers: columns[4].innerText.trim(),
             peakPlayers: columns[5].innerText.trim(),
-            imageUrl, // 이미지 URL 추가
-            linkHref,
+            gameUrl,
+            imageUrl,
           };
         });
       }, tableSelector);
@@ -157,20 +154,17 @@ export class ScraperService {
         return Array.from(rows).map((row) => {
           const columns = row.querySelectorAll('td');
 
-          // 이미지 URL 추출
-          let imageUrl = '';
-          const imgElement = columns[2].querySelector(
-            'a > img',
-          ) as HTMLImageElement;
-          if (imgElement) {
-            imageUrl = imgElement.src;
-          }
-
           // 링크와 텍스트 추출
-          const linkElement = columns[2].querySelector(
+          const gameElement = columns[2].querySelector(
             'a',
           ) as HTMLAnchorElement;
-          const gameUrl = linkElement ? linkElement.href : null;
+          const gameUrl = gameElement ? gameElement.href : null;
+
+          // 링크에서 앱 ID 추출 (정규 표현식 사용)
+          const appIdMatch = gameUrl ? gameUrl.match(/\/app\/(\d+)/) : null;
+          const appId = appIdMatch ? appIdMatch[1] : null;
+
+          const imageUrl = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/header.jpg?t=1723514356`;
 
           return {
             rank: columns[1].innerText.trim(),
@@ -178,8 +172,8 @@ export class ScraperService {
             price: columns[3].innerText.trim(), //Today's price for this game.
             change: columns[4].innerText.trim(), //Change in rank compared to previous week.
             weeks: columns[5].innerText.trim(), //Number of weeks in top 100
-            imageUrl, // 이미지 URL
             gameUrl, // 게임 URL
+            imageUrl, // 이미지 URL
           };
         });
       }, tableSelector);
