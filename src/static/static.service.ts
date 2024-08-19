@@ -93,4 +93,15 @@ export class StaticService {
       throw error;
     }
   }
+
+  async getBroadcasts(): Promise<{ cachedCharts: string }> {
+    try {
+      //캐시에서 데이터 가져오기
+      const cachedCharts = await this.cacheService.get(`broadcasts`);
+      return JSON.parse(cachedCharts);
+    } catch (error) {
+      this.logger.error(`Error fetching broadcasts from cache:`, error.message);
+      throw error;
+    }
+  }
 }
