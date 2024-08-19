@@ -33,18 +33,18 @@ export class MostPlayedDto {
   peakPlayers: string;
 
   @ApiProperty({
-    description: '게임 이미지 URL',
-    example:
-      'https://shared.akamai.steamstatic.com//store_item_assets/steam/apps/730/capsule_231x87.jpg?t=1719426374',
-  })
-  imageUrl: string;
-
-  @ApiProperty({
     description: '게임 페이지 URL',
     example:
       'https://store.steampowered.com/app/381210/Dead_by_Daylight?snr=1_7001_7005__7003',
   })
   gameUrl: string;
+
+  @ApiProperty({
+    description: '게임 이미지 URL',
+    example:
+      'https://shared.akamai.steamstatic.com//store_item_assets/steam/apps/730/capsule_231x87.jpg?t=1719426374',
+  })
+  imageUrl: string;
 }
 
 export class TopSellerDto {
@@ -79,18 +79,18 @@ export class TopSellerDto {
   weeks: string;
 
   @ApiProperty({
-    description: '게임 이미지 URL',
-    example:
-      'https://shared.akamai.steamstatic.com//store_item_assets/steam/apps/381210/capsule_231x87.jpg?t=1721927210',
-  })
-  imageUrl: string;
-
-  @ApiProperty({
     description: '게임 페이지 URL',
     example:
       'https://store.steampowered.com/app/381210/Dead_by_Daylight?snr=1_7001_7005__7003',
   })
   gameUrl: string;
+
+  @ApiProperty({
+    description: '게임 이미지 URL',
+    example:
+      'https://shared.akamai.steamstatic.com//store_item_assets/steam/apps/381210/capsule_231x87.jpg?t=1721927210',
+  })
+  imageUrl: string;
 }
 
 export class TopPlayTimeUserDto {
