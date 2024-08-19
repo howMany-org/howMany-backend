@@ -13,6 +13,7 @@ import {
   TopPlayTimeUserDto,
   TopSellerDto,
 } from './dto/static.dto';
+import { LimitQueryDto } from './dto/\blimitQuery.dto';
 
 @Controller('api/v1/static')
 @ApiTags('static API')
@@ -23,45 +24,64 @@ export class StaticContoller {
   @ApiOperation({
     summary: 'getMostPlayed API',
     description:
-      'MostPlayed 차트를 불러오는 API, 15분마다 업데이트 (예: 06:00, 06:15, 06:30 등)',
+      'MostPlayed 차트 100개를 불러오는 API, 15분마다 업데이트 (예: 06:00, 06:15, 06:30 등)',
   })
   @ApiBadRequestResponse({
     description: 'Bad request',
   })
   @ApiOkResponse({
     description: 'OK',
-    type: MostPlayedDto, // DTO를 참조합니다.
+    type: MostPlayedDto,
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: '가져올 차트 항목의 개수 (기본값: 10, 최소값: 1, 최대값: 100)',
+    required: false,
+    type: 'number',
   })
   @Get('most-played')
-  async scrapMostPlayed() {
-    return await this.staticService.getMostPlayedCharts();
+  async getMostPlayed(@Query() query: LimitQueryDto): Promise<MostPlayedDto[]> {
+    const limit = query.limit || 10; // 기본값 10 설정
+    return await this.staticService.getMostPlayedCharts(limit);
   }
 
   //topseller게임
   @ApiOperation({
     summary: 'getTopSeller API',
-    description: 'TopSeller 차트를 불러오는 api, 하루마다 00:00에 업데이트',
+    description:
+      'TopSeller 차트 100개를 불러오는 API, 하루마다 00:00에 업데이트',
   })
   @ApiBadRequestResponse({ description: 'Invalid request parameters' })
   @ApiOkResponse({
     description: 'OK',
-    type: TopSellerDto, // DTO를 참조합니다.
+    type: TopSellerDto,
   })
   @ApiQuery({
     name: 'region',
-    description: 'TopSeller 차트를 가져올 지역 (예: KR, US, JP, CN)',
-    required: true,
+    description:
+      'TopSeller 차트를 가져올 지역 (예: KR, US, JP, CN, global) 미입력시 Global차트제공',
+    required: false,
     type: 'string',
   })
+  @ApiQuery({
+    name: 'limit',
+    description: '가져올 차트 항목의 개수 (기본값: 10 최대값: 100)',
+    required: false,
+    type: 'number',
+  })
   @Get('top-seller')
-  async scrapTopSeller(@Query('region') region: string) {
-    return await this.staticService.getTopSellerCharts(region);
+  async TopSeller(
+    @Query() query: LimitQueryDto,
+    @Query('region') region: string = 'global',
+  ): Promise<TopSellerDto[]> {
+    const limit = query.limit || 10; // 기본값 10 설정
+    return await this.staticService.getTopSellerCharts(limit, region);
   }
 
   //topPlayTime사용자
   @ApiOperation({
     summary: 'topPlayTimeUser API',
-    description: 'TopPlayTimeUser 차트를 불러오는 api',
+    description: 'TopPlayTimeUser 차트를 불러오는 API',
   })
   @ApiBadRequestResponse({ description: 'Invalid request parameters' })
   @ApiOkResponse({
@@ -69,28 +89,39 @@ export class StaticContoller {
     type: TopPlayTimeUserDto, // DTO를 사용하여 응답 타입을 명시합니다.
   })
   @ApiQuery({
-    name: 'region-or-country-code',
+    name: 'regionOrCountryCode',
     description:
-      'topPlayTimeUse 차트를 가져올 국가 (예: kr, us, jp, cn) 혹은 지역 (예: europe, north_america, south_america, asia, africa, oceania, antarctica)',
+      'topPlayTimeUser 차트를 가져올 국가 (예: kr, us, jp, cn) 혹은 지역 (예: europe, north_america, south_america, asia, africa, oceania, antarctica)',
     required: false,
     type: 'string',
   })
+  @ApiQuery({
+    name: 'limit',
+    description: '가져올 차트 항목의 개수 (기본값: 10 최대값: 100)',
+    required: false,
+    type: 'number',
+  })
   @Get('top-playtime-user')
   async getTopPlaytimeUser(
+    @Query() query: LimitQueryDto,
     @Query('regionOrCountryCode') regionOrCountryCode?: string,
-  ) {
-    return await this.staticService.getTopPlaytimeUser(regionOrCountryCode);
+  ): Promise<TopPlayTimeUserDto[]> {
+    const limit = query.limit || 10; // 기본값 10 설정
+    return await this.staticService.getTopPlaytimeUser(
+      limit,
+      regionOrCountryCode,
+    );
   }
 
   //topGamesOwner사용자
   @ApiOperation({
     summary: 'topGamesOwner API',
-    description: 'TopGamesOwner 차트를 불러오는 api',
+    description: 'TopGamesOwner 차트를 불러오는 API',
   })
   @ApiBadRequestResponse({ description: 'Invalid request parameters' })
   @ApiOkResponse({
     description: 'OK',
-    type: TopGamesOwnerDto, // DTO를 사용하여 응답 타입을 명시합니다.
+    type: TopGamesOwnerDto,
   })
   @ApiQuery({
     name: 'regionOrCountryCode',
@@ -99,11 +130,22 @@ export class StaticContoller {
     required: false,
     type: 'string',
   })
+  @ApiQuery({
+    name: 'limit',
+    description: '가져올 차트 항목의 개수 (기본값: 10 최대값: 100)',
+    required: false,
+    type: 'number',
+  })
   @Get('top-games-owner')
   async getTopGamesOwner(
+    @Query() query: LimitQueryDto,
     @Query('regionOrCountryCode') regionOrCountryCode?: string,
-  ) {
-    return await this.staticService.getTopGamesOwner(regionOrCountryCode);
+  ): Promise<TopGamesOwnerDto[]> {
+    const limit = query.limit || 10; // 기본값 10 설정
+    return await this.staticService.getTopGamesOwner(
+      limit,
+      regionOrCountryCode,
+    );
   }
 
   @ApiOperation({
@@ -142,8 +184,14 @@ export class StaticContoller {
       },
     },
   })
+  @ApiQuery({
+    name: 'limit',
+    description: '가져올 차트 항목의 개수 (기본값: 10 최대값: 100)',
+    required: false,
+    type: 'number',
+  })
   @Get('broadcasts')
-  async getBroadcasts() {
+  async getBroadcasts(@Query() query: LimitQueryDto) {
     return await this.staticService.getBroadcasts();
   }
 }

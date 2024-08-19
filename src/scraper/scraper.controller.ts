@@ -7,6 +7,11 @@ import {
   ApiBadRequestResponse,
   ApiQuery,
 } from '@nestjs/swagger';
+import {
+  BroadcastsDto,
+  MostPlayedDto,
+  TopSellerDto,
+} from 'src/static/dto/static.dto';
 
 @Controller('api/v1/scraper') // v1 버전을 포함한 경로
 @ApiTags('(backend 테스트용) scraper API')
@@ -48,7 +53,7 @@ export class ScraperController {
     },
   })
   @Get('most-played')
-  async scrapMostPlayed() {
+  async scrapMostPlayed(): Promise<MostPlayedDto[]> {
     const charts = await this.scraperService.scrapMostPlayedCharts();
     return charts;
   }
@@ -87,18 +92,20 @@ export class ScraperController {
   })
   @ApiQuery({
     name: 'region',
-    description: 'Top Seller 차트를 가져올 지역 (예: KR, US, JP, CN)',
+    description: 'Top Seller 차트를 가져올 지역 (예: KR, US, JP, CN, global)',
     required: true,
     type: 'string',
   })
   @Get('top-seller')
-  async scrapTopSeller(@Query('region') region: string) {
+  async scrapTopSeller(
+    @Query('region') region: string,
+  ): Promise<TopSellerDto[]> {
     const charts = await this.scraperService.scrapTopSellerCharts(region);
     return charts;
   }
 
   @Get('broadcasts')
-  async scrapBroadcasts() {
+  async scrapBroadcasts(): Promise<BroadcastsDto[]> {
     const broadcasts = await this.scraperService.scrapBroadcasts();
     return broadcasts;
   }
