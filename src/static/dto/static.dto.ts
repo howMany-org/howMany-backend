@@ -1,13 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UserDto } from 'src/user/dto/user.dto';
 
 export class MostPlayedDto {
   @ApiProperty({
+    description: '게임의 순위',
     example: 1,
   })
-  rank: number;
+  rank: string;
 
   @ApiProperty({
     example: 'Counter-Strike 2',
+    description: '게임 이름',
   })
   name: string;
 
@@ -35,6 +38,13 @@ export class MostPlayedDto {
       'https://shared.akamai.steamstatic.com//store_item_assets/steam/apps/730/capsule_231x87.jpg?t=1719426374',
   })
   imageUrl: string;
+
+  @ApiProperty({
+    description: '게임 페이지 URL',
+    example:
+      'https://store.steampowered.com/app/381210/Dead_by_Daylight?snr=1_7001_7005__7003',
+  })
+  gameUrl: string;
 }
 
 export class TopSellerDto {
@@ -42,7 +52,7 @@ export class TopSellerDto {
     description: '게임의 순위',
     example: 9,
   })
-  rank: number;
+  rank: string;
 
   @ApiProperty({
     description: '게임 이름',
@@ -74,158 +84,83 @@ export class TopSellerDto {
       'https://shared.akamai.steamstatic.com//store_item_assets/steam/apps/381210/capsule_231x87.jpg?t=1721927210',
   })
   imageUrl: string;
-}
-
-export class GamesDto {
-  @ApiProperty({
-    description: '총 게임 수',
-    example: 24224,
-  })
-  total_games: number;
-}
-
-export class SteamUserDto {
-  @ApiProperty({
-    description: 'Steam 사용자 이름',
-    example: 'an0rose',
-  })
-  steam_name: string;
 
   @ApiProperty({
-    description: 'Steam ID',
-    example: '76561198001221571',
-  })
-  steam_id: string;
-
-  @ApiProperty({
-    description: 'Steam Ladder 프로필 URL',
-    example: 'https://steamladder.com/profile/76561198001221571/',
-  })
-  steamladder_url: string;
-
-  @ApiProperty({
-    description: 'Steam 가입 날짜',
-    example: '2008-09-16T02:52:45',
-  })
-  steam_join_date: string;
-
-  @ApiProperty({
-    description: 'Steam 국가 코드',
-    example: 'KR',
-  })
-  steam_country_code: string;
-
-  @ApiProperty({
-    description: 'Steam 아바타 URL',
+    description: '게임 페이지 URL',
     example:
-      'https://avatars.steamstatic.com/dc59a43c5e23c60b83c22b9841ad09a36ac5a4f8_full.jpg',
+      'https://store.steampowered.com/app/381210/Dead_by_Daylight?snr=1_7001_7005__7003',
   })
-  steam_avatar_src: string;
-}
-
-export class SteamStatsDto {
-  @ApiProperty({
-    description: 'Steam 사용자 레벨',
-    example: 458,
-  })
-  level: number;
-
-  @ApiProperty({
-    description: '경험치',
-    example: 1076164,
-  })
-  xp: number;
-
-  @ApiProperty({
-    description: '배지 정보',
-    type: 'object',
-    additionalProperties: true, // Additional properties are allowed
-  })
-  badges: Record<string, any>; // Use Record<string, any> for flexible properties
-
-  @ApiProperty({
-    description: '게임 정보',
-    type: GamesDto,
-  })
-  games: GamesDto;
-
-  @ApiProperty({
-    description: '밴 정보',
-    type: 'object',
-    additionalProperties: true, // Additional properties are allowed
-  })
-  bans: Record<string, any>; // Use Record<string, any> for flexible properties
-}
-
-export class LadderDto {
-  @ApiProperty({
-    description: '순위',
-    example: 0,
-  })
-  pos: number;
-
-  @ApiProperty({
-    description: 'Steam 사용자 정보',
-    type: SteamUserDto,
-  })
-  steam_user: SteamUserDto;
-
-  @ApiProperty({
-    description: 'Steam 통계',
-    type: SteamStatsDto,
-  })
-  steam_stats: SteamStatsDto;
+  gameUrl: string;
 }
 
 export class TopPlayTimeUserDto {
   @ApiProperty({
-    description: '타입',
-    example: 'G',
+    description: '순위',
+    example: 1,
   })
-  type: string;
+  rank: number;
 
   @ApiProperty({
-    description: '타입 URL',
-    example: 'games',
+    description: 'Steam 사용자 기본정보',
+    type: UserDto,
   })
-  type_url: string;
+  userInfo: UserDto;
 
   @ApiProperty({
-    description: '국가 코드',
-    example: 'KR',
+    description: '총 플레이타임',
+    example: 160450322,
   })
-  country_code: string;
-
-  @ApiProperty({
-    description: '계층',
-    type: [LadderDto], // 배열의 항목 타입을 지정
-  })
-  ladder: LadderDto[];
+  totalPlaytime: number;
 }
 
 export class TopGamesOwnerDto {
   @ApiProperty({
-    description: '타입',
-    example: 'G',
+    description: '순위',
+    example: 1,
   })
-  type: string;
+  rank: number;
 
   @ApiProperty({
-    description: '타입 URL',
-    example: 'games',
+    description: 'Steam 사용자 기본정보',
+    type: UserDto,
   })
-  type_url: string;
+  userInfo: UserDto;
 
   @ApiProperty({
-    description: '국가 코드',
-    nullable: true,
-    example: 'KR',
+    description: '총 게임 수',
+    example: 38780,
   })
-  country_code: string | null;
+  totalGames: number;
+}
+
+export class BroadcastsDto {
+  @ApiProperty({
+    description: '방송 URL',
+    example: 'https://steamcommunity.com/broadcast/watch/76561198936960354',
+  })
+  broadcastLink: string;
 
   @ApiProperty({
-    description: '계층',
-    type: [LadderDto],
+    description: '시청자수 정보',
+    example: '2,486 viewers',
   })
-  ladder: LadderDto[];
+  viewers: string;
+
+  @ApiProperty({
+    description: '방송 제목',
+    example: 'Crime Scene Cleaner',
+  })
+  title: string;
+
+  @ApiProperty({
+    description: '방송자 정보',
+    example: 'Intuition',
+  })
+  streamerInfo: string;
+
+  @ApiProperty({
+    description: '방송자 프로필 링크',
+    example: 'https://steamcommunity.com/profiles/76561198936960354/',
+  })
+  streamerInfoLink: string;
 }
