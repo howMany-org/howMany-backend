@@ -59,13 +59,13 @@ export class StaticContoller {
   @ApiQuery({
     name: 'region',
     description:
-      'TopSeller 차트를 가져올 지역 (예: KR, US, JP, CN, global) 미입력시 Global차트제공',
+      'TopSeller 차트를 가져올 지역 (예: KR, US, JP, CN, global) 기본값: global',
     required: false,
     type: 'string',
   })
   @ApiQuery({
     name: 'limit',
-    description: '가져올 차트 항목의 개수 (기본값: 10 최대값: 100)',
+    description: '가져올 차트 항목의 개수 (기본값: 10, 최소값: 1, 최대값: 100)',
     required: false,
     type: 'number',
   })
@@ -91,13 +91,13 @@ export class StaticContoller {
   @ApiQuery({
     name: 'regionOrCountryCode',
     description:
-      'topPlayTimeUser 차트를 가져올 국가 (예: kr, us, jp, cn) 혹은 지역 (예: europe, north_america, south_america, asia, africa, oceania, antarctica)',
+      'topPlayTimeUser 차트를 가져올 국가 (예: kr, us, jp, cn) 혹은 지역 (예: europe, asia, africa), 미입력시 전세계의 통계를 불러옴',
     required: false,
     type: 'string',
   })
   @ApiQuery({
     name: 'limit',
-    description: '가져올 차트 항목의 개수 (기본값: 10 최대값: 100)',
+    description: '가져올 차트 항목의 개수 (기본값: 10, 최소값: 1, 최대값: 100)',
     required: false,
     type: 'number',
   })
@@ -113,7 +113,7 @@ export class StaticContoller {
     );
   }
 
-  //topGamesOwner사용자
+  //topGamesOwner
   @ApiOperation({
     summary: 'topGamesOwner API',
     description: 'TopGamesOwner 차트를 불러오는 API',
@@ -126,13 +126,13 @@ export class StaticContoller {
   @ApiQuery({
     name: 'regionOrCountryCode',
     description:
-      'TopGamesOwner 차트를 가져올 국가 (예: kr, us, jp, cn) 혹은 지역 (예: europe, north_america, south_america, asia, africa, oceania, antarctica)',
+      'TopGamesOwner 차트를 가져올 국가 (예: kr, us, jp, cn) 혹은 지역 (예: europe, asia, africa), 미입력시 전세계의 통계를 불러옴',
     required: false,
     type: 'string',
   })
   @ApiQuery({
     name: 'limit',
-    description: '가져올 차트 항목의 개수 (기본값: 10 최대값: 100)',
+    description: '가져올 차트 항목의 개수 (기본값: 10, 최소값: 1, 최대값: 100)',
     required: false,
     type: 'number',
   })
@@ -155,38 +155,11 @@ export class StaticContoller {
   @ApiOkResponse({
     status: 200,
     description: 'OK',
-    schema: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          broadcastLink: {
-            type: 'string',
-            description: '방송의 링크',
-          },
-          viewers: {
-            type: 'string',
-            description: '현재 시청자 수',
-          },
-          title: {
-            type: 'string',
-            description: '방송 제목',
-          },
-          streamerInfo: {
-            type: 'string',
-            description: '스트리머의 이름',
-          },
-          streamerInfoLink: {
-            type: 'string',
-            description: '스트리머의 프로필 링크',
-          },
-        },
-      },
-    },
+    type: TopGamesOwnerDto,
   })
   @ApiQuery({
     name: 'limit',
-    description: '가져올 차트 항목의 개수 (기본값: 10 최대값: 100)',
+    description: '가져올 방송목록의 개수 (기본값: 10, 최소값: 1, 최대값: 10)',
     required: false,
     type: 'number',
   })
