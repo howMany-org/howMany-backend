@@ -7,10 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Badge {
+  id         Int    @id @default(autoincrement())
+  name       String @db.VarChar(100)
+  badgeHash  String @db.VarChar(255)
+}
+
+model MbtiAnswer {
+  id          Int    @id @default(autoincrement())
+  questionId  Int
+  answer      String @db.VarChar(50)
+
+  question    MbtiQuestion @relation(fields: [questionId], references: [id])
+}
+
+model MbtiQuestion {
+  id       Int      @id @default(autoincrement())
+  number   Int
+  question String   @db.Text
+
+  answers  MbtiAnswer[]
+}
+
+model MbtiResult {
+  id        Int    @id @default(autoincrement())
+  mbtiType  String @db.VarChar(4)
+  description String @db.Text
+}
+
 model Users {
-  id            Int      @id @default(autoincrement())
-  steamId       BigInt   @unique
-  steamName     String
-  steamJoinDate DateTime
-  avatarHash    String?
+  id              Int      @id @default(autoincrement())
+  steamId         BigInt   @unique
+  steamName       String   @db.VarChar(50)
+  steamJoinDate   DateTime
+  avatarHash      String?  @db.VarChar(255)
+  mbtiType        String?  @db.VarChar(4)
 }

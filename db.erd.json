@@ -5,7 +5,7 @@
     "width": 2000,
     "height": 2000,
     "scrollTop": 0,
-    "scrollLeft": 0,
+    "scrollLeft": -183,
     "zoomLevel": 1,
     "show": 431,
     "database": 4,
@@ -35,11 +35,9 @@
       "n5wHeH4FFLg3lwTQxbfmA",
       "ax-mRtT72MsTPJ6bf5qt7",
       "dCM5hZKgkuC3Rm3Z7PCrA",
-      "GZxkE9hsPjw8UEijraWQ_",
       "Bv3gvLD5MqxHCB9Qsvjwm"
     ],
     "relationshipIds": [
-      "nM_ETtLPtmf4qf_gY3brQ",
       "MhaDXh_VxeMYnm9W1hmT1"
     ],
     "indexIds": [],
@@ -163,10 +161,9 @@
       "ax-mRtT72MsTPJ6bf5qt7": {
         "id": "ax-mRtT72MsTPJ6bf5qt7",
         "name": "mbti_result",
-        "comment": "mbti검사결과",
+        "comment": "mbti 검사결과 및 추천게임",
         "columnIds": [
           "bhm0Yijo5RjxgZzD2q54q",
-          "fwVJ9HbbkDYk0wwrpV9yq",
           "cJEPtjrgeUEtW2O1Isjay",
           "Xj2YYB1e7I8Xe763LQiFR"
         ],
@@ -180,15 +177,15 @@
           "ylp52DkVnZs_iCSETs3WW"
         ],
         "ui": {
-          "x": 906.7591,
+          "x": 910.7591,
           "y": 93.0504,
           "zIndex": 301,
           "widthName": 66,
-          "widthComment": 69,
+          "widthComment": 131,
           "color": "#FFEB3B"
         },
         "meta": {
-          "updateAt": 1725075766238,
+          "updateAt": 1725078992735,
           "createAt": 1721551158480
         }
       },
@@ -800,8 +797,8 @@
       "cJEPtjrgeUEtW2O1Isjay": {
         "id": "cJEPtjrgeUEtW2O1Isjay",
         "tableId": "ax-mRtT72MsTPJ6bf5qt7",
-        "name": "result",
-        "comment": "mbti결과",
+        "name": "mbti_type",
+        "comment": "mbti 결과",
         "dataType": "VARCHAR(4)",
         "default": "",
         "options": 8,
@@ -813,27 +810,27 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1725011128621,
+          "updateAt": 1725078953695,
           "createAt": 1721551213690
         }
       },
       "Xj2YYB1e7I8Xe763LQiFR": {
         "id": "Xj2YYB1e7I8Xe763LQiFR",
         "tableId": "ax-mRtT72MsTPJ6bf5qt7",
-        "name": "create_date",
-        "comment": "검사 날짜",
-        "dataType": "TIMESTAMP",
-        "default": "now()",
+        "name": "description",
+        "comment": "추천 게임",
+        "dataType": "TEXT",
+        "default": "",
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 69,
+          "widthName": 65,
           "widthComment": 60,
-          "widthDataType": 71,
+          "widthDataType": 60,
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1725025569029,
+          "updateAt": 1725078932112,
           "createAt": 1721551213926
         }
       },
@@ -886,7 +883,7 @@
         "default": "",
         "options": 8,
         "ui": {
-          "keys": 2,
+          "keys": 0,
           "widthName": 60,
           "widthComment": 87,
           "widthDataType": 60,
@@ -1338,7 +1335,7 @@
           "columnIds": [
             "fwVJ9HbbkDYk0wwrpV9yq"
           ],
-          "x": 906.7591,
+          "x": 910.7591,
           "y": 169.0504,
           "direction": 1
         },
@@ -1673,7 +1670,7 @@
       {
         "name": 1725075766238,
         "ui.color": 1721560388691,
-        "comment": 1721560420636
+        "comment": 1725078992734
       }
     ],
     "bhm0Yijo5RjxgZzD2q54q": [
@@ -1693,22 +1690,22 @@
       1721551213673,
       -1,
       {
-        "name": 1721551235608,
+        "name": 1725078851945,
         "dataType": 1725011128620,
-        "comment": 1721562359976,
+        "comment": 1725078953694,
         "options(notNull)": 1721635021342
       }
     ],
     "Xj2YYB1e7I8Xe763LQiFR": [
       "tableColumnEntities",
-      1721551213911,
-      -1,
+      1725078830753,
+      1725078825153,
       {
-        "name": 1721561635219,
-        "dataType": 1721562339650,
-        "default": 1721551267718,
+        "name": 1725078866105,
+        "dataType": 1725078883765,
+        "default": 1725078932112,
         "options(notNull)": 1721635023390,
-        "comment": 1725025569029
+        "comment": 1725078888517
       }
     ],
     "C_hD_OfZsEEbxazYk8Yko": [
@@ -1727,8 +1724,8 @@
     ],
     "fwVJ9HbbkDYk0wwrpV9yq": [
       "tableColumnEntities",
-      1721561106635,
-      -1,
+      1725078831052,
+      1725078975023,
       {
         "options(notNull)": 1721561106635,
         "name": 1721561278588,
@@ -1739,8 +1736,8 @@
     ],
     "nM_ETtLPtmf4qf_gY3brQ": [
       "relationshipEntities",
-      1721561106635,
-      -1,
+      1725078831052,
+      1725078975023,
       {}
     ],
     "Bb8a75oznyAbLSq4sj1z8": [
@@ -1868,8 +1865,8 @@
     ],
     "GZxkE9hsPjw8UEijraWQ_": [
       "tableEntities",
-      1725037559740,
-      -1,
+      1725078980770,
+      1725078987318,
       {
         "name": 1725037574720,
         "comment": 1725037581123,
