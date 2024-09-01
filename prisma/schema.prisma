@@ -7,39 +7,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Badge {
-  id         Int    @id @default(autoincrement())
-  name       String @db.VarChar(100)
-  badgeHash  String @db.VarChar(255)
+model Game {
+  id             Int               @id @default(autoincrement()) @map("id")
+  title          String            @map("title")
+  appId          Int               @map("app_id")
+  imageHash      String?           @map("image_hash")
+  mbtiGameMappings MbtiGameMapping[]  // 게임과 MBTI 매핑 관계
+
+  @@map("game")
 }
 
 model MbtiAnswer {
-  id          Int    @id @default(autoincrement())
-  questionId  Int
-  answer      String @db.VarChar(50)
+  id            Int              @id @default(autoincrement()) @map("id")
+  questionId    Int              @map("question_id")
+  answer        String           @map("answer")
+  mbtiQuestion  MbtiQuestion     @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
-  question    MbtiQuestion @relation(fields: [questionId], references: [id])
+  @@index([questionId], name: "FK_mbti_questions_TO_mbti_answers")
+  @@map("mbti_answers")
+}
+
+model MbtiGameMapping {
+  id           Int               @id @default(autoincrement()) @map("id")
+  mbtiId       Int               @map("mbti_id")
+  gameId       Int               @map("game_id")
+  mbti         Mbti              @relation(fields: [mbtiId], references: [id], onDelete: Cascade)
+  game         Game              @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@index([mbtiId], name: "FK_mbti_TO_mbti_game_mapping")
+  @@index([gameId], name: "FK_game_TO_mbti_game_mapping")
+  @@map("mbti_game_mapping")
 }
 
 model MbtiQuestion {
-  id       Int      @id @default(autoincrement())
-  number   Int
-  question String   @db.Text
+  id            Int              @id @default(autoincrement()) @map("id")
+  question      String           @map("question")
+  mbtiAnswers   MbtiAnswer[]     // MBTI 질문에 대한 답변들
 
-  answers  MbtiAnswer[]
+  @@map("mbti_questions")
 }
 
-model MbtiResult {
-  id        Int    @id @default(autoincrement())
-  mbtiType  String @db.VarChar(4)
-  description String @db.Text
+model Mbti {
+  id               Int            @id @default(autoincrement()) @map("id")
+  mbtiType         String         @map("mbti_type")
+  description      String         @map("description")
+  mbtiGameMappings MbtiGameMapping[]  // MBTI 유형과 게임 매핑 관계
+
+  @@map("mbti")
 }
 
-model Users {
-  id              Int      @id @default(autoincrement())
-  steamId         BigInt   @unique
-  steamName       String   @db.VarChar(50)
-  steamJoinDate   DateTime
-  avatarHash      String?  @db.VarChar(255)
-  mbtiType        String?  @db.VarChar(4)
+model User {
+  id              Int       @id @default(autoincrement()) @map("id")
+  steamId         BigInt    @map("steam_id")
+  steamName       String    @map("steam_name")
+  steamJoinDate   DateTime  @map("steam_join_date")
+  avatarHash      String?   @map("avatar_hash")
+  mbtiType        String?   @map("mbti_type")
+
+  @@map("users")
 }
