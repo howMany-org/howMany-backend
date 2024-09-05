@@ -4,6 +4,8 @@ import {
   Controller,
   HttpStatus,
   HttpException,
+  Get,
+  Param,
 } from '@nestjs/common';
 import { MbtiService } from './mbti.service';
 import { AnswersDto } from './dto/answers.dto';
@@ -20,7 +22,21 @@ import {
 export class MbtiController {
   constructor(private readonly mbtiService: MbtiService) {}
 
-  @Post()
+  @Get('questions/:questionId')
+  async getQuestionData(@Param('questionId') questionId: string) {
+    const id = parseInt(questionId, 10);
+    if (isNaN(id)) {
+      // throw new BadRequestExceptio('Invalid questionId');
+      console.log('에러');
+    }
+    return this.mbtiService.getQuestionData(id);
+  }
+
+  // @Get('questions')
+  // async getQuestionData(@Param('questionId') questionId: number) {
+  //   const result = await this.mbtiService.getQuestionData(questionId);
+  // }
+
   @ApiOperation({
     summary: 'mbti API',
     description: '사용자의 mbti 답변결과를 필터링',
@@ -58,18 +74,17 @@ export class MbtiController {
         answers: {
           type: 'array',
           items: { type: 'number' },
-          example: [1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1], // 사용자 답변 예시
+          example: [2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 1, 1, 1, 2, 1, 1, 2, 2], // 사용자 답변 예시
         },
       },
     },
   })
-  async analyzeAnswers(@Body() answersDto: AnswersDto) {
+  @Post('result')
+  async getMbtiResult(@Body() answersDto: AnswersDto) {
     const { answers } = answersDto;
-
     if (!answers || !Array.isArray(answers)) {
       throw new HttpException('Invalid answers format', HttpStatus.BAD_REQUEST);
     }
-
     try {
       const result = await this.mbtiService.analyzeAnswers(answers);
       return { result };

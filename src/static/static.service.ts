@@ -79,15 +79,18 @@ export class StaticService {
       );
       // 필요한 정보만 필터링
 
+      console.log('response', response.ladder);
       const filteredData = response.ladder.map((item) => ({
         rank: parseInt(item.pos) + 1,
+        totalPlaytime: item.steam_stats.games.total_playtime_min,
         userInfo: {
           steamName: item.steam_user.steam_name,
           steamId: item.steam_user.steam_id,
           countryCode: item.steam_user.steam_country_code,
+          steamProfileUrl:
+            'https://steamcommunity.com/profiles/' + item.steam_user.steam_id,
           steamAvatarUrl: item.steam_user.steam_avatar_src,
         },
-        totalPlaytime: item.steam_stats.games.total_playtime_min,
       }));
 
       // 차트 항목 개수를 필터링
@@ -119,13 +122,15 @@ export class StaticService {
       // 필요한 정보만 필터링
       const filteredData = response.ladder.map((item) => ({
         rank: parseInt(item.pos) + 1,
+        totalGames: item.steam_stats.games.total_games,
         userInfo: {
           steamName: item.steam_user.steam_name,
           steamId: item.steam_user.steam_id,
           countryCode: item.steam_user.steam_country_code,
+          steamProfileUrl:
+            'https://steamcommunity.com/profiles/' + item.steam_user.steam_id,
           steamAvatarUrl: item.steam_user.steam_avatar_src,
         },
-        totalGames: item.steam_stats.games.total_games,
       }));
 
       // 차트 항목 개수를 필터링

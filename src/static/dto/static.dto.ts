@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserDto } from 'src/user/dto/user.dto';
 
 export class MostPlayedDto {
   @ApiProperty({
@@ -93,6 +92,39 @@ export class TopSellerDto {
   imageUrl: string;
 }
 
+export class UserChartDto {
+  @ApiProperty({
+    description: 'Steam 사용자 이름',
+    example: 'Sonix',
+  })
+  steamName: string;
+
+  @ApiProperty({
+    description: 'Steam ID',
+    example: '76561198028121353',
+  })
+  steamId: string;
+
+  @ApiProperty({
+    description: 'Steam 국가 코드',
+    example: 'CN',
+  })
+  countryCode: string;
+
+  @ApiProperty({
+    description: 'Steam 사용자 프로필 URL',
+    example: 'https://steamcommunity.com/profiles/76561199115107502/',
+  })
+  SteamProfileUrl: string;
+
+  @ApiProperty({
+    description: 'Steam 아바타 URL',
+    example:
+      'https://avatars.steamstatic.com/54b97d0998d152f01d876d03dad1fdd2fb642dd2_full.jpg',
+  })
+  steamAvatarUrl: string;
+}
+
 export class TopPlayTimeUserDto {
   @ApiProperty({
     description: '순위',
@@ -101,16 +133,16 @@ export class TopPlayTimeUserDto {
   rank: number;
 
   @ApiProperty({
-    description: 'Steam 사용자 기본정보',
-    type: UserDto,
-  })
-  userInfo: UserDto;
-
-  @ApiProperty({
     description: '총 플레이타임',
     example: 160450322,
   })
   totalPlaytime: number;
+
+  @ApiProperty({
+    description: 'Steam 사용자 기본정보',
+    type: UserChartDto,
+  })
+  userInfo: UserChartDto;
 }
 
 export class TopGamesOwnerDto {
@@ -121,16 +153,16 @@ export class TopGamesOwnerDto {
   rank: number;
 
   @ApiProperty({
-    description: 'Steam 사용자 기본정보',
-    type: UserDto,
-  })
-  userInfo: UserDto;
-
-  @ApiProperty({
     description: '총 게임 수',
     example: 38780,
   })
   totalGames: number;
+
+  @ApiProperty({
+    description: 'Steam 사용자 기본정보',
+    type: UserChartDto,
+  })
+  userInfo: UserChartDto;
 }
 
 export class BroadcastsDto {

@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { GamesDto } from './game.dto';
-import { UserDto, UserStatsDto } from './user.dto';
+import { UserSummaryDto, UserStatsDto } from './user.dto';
 
 export class ProfileDto {
   @ApiProperty({
     description: 'Steam 사용자 기본정보',
-    type: UserDto,
+    type: UserSummaryDto,
   })
-  userInfo: UserDto;
+  userInfo: UserSummaryDto;
 
   @ApiProperty({
     description: 'Steam 사용자 세부정보',

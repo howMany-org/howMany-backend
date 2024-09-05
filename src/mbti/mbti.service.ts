@@ -1,7 +1,21 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class MbtiService {
+  constructor(private prisma: PrismaService) {}
+
+  async getQuestionData(questionId: number) {
+    const question = await this.prisma.mbtiQuestion.findUnique({
+      where: { id: questionId },
+      include: { mbtiAnswer: true }, // 질문과 관련된 답변들을 포함
+    });
+    if (!question) {
+      throw new Error(`Question with ID ${questionId} not found.`);
+    }
+    return question;
+  }
+
   analyzeAnswers(answers: number[]): {
     mbtiType: string;
     scores: { [key: string]: number };

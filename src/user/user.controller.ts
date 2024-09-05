@@ -1,7 +1,12 @@
-import { Get, Res, Req, Query, UseGuards, Controller } from '@nestjs/common';
+import {
+  Get,
+  Query,
+  Controller,
+  Res,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { Response } from 'express'; // express의 Response와 Request를 import합니다.
 import { UserService } from './user.service';
-import { Response } from 'express';
-import { AuthGuard } from '@nestjs/passport';
 import {
   ApiOkResponse,
   ApiOperation,
@@ -14,16 +19,6 @@ import { ProfileDto } from './dto/\bprofile.dto';
 @ApiTags('user API')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @ApiOperation({
-    summary: '로그인 API',
-    description: '스팀 auth를 이용한 로그인',
-  })
-  @Get('login')
-  @UseGuards(AuthGuard('steam'))
-  async steamLogin() {
-    // Passport가 자동으로 리디렉션합니다.
-  }
 
   // 사용자 정보 및 게임 정보 조회
   @ApiOperation({
@@ -42,10 +37,18 @@ export class UserController {
   })
   @Get('profile')
   async getProfile(@Query('id') id: string) {
-    const user = await this.userService.getPlayerSummaries(id);
-    const games = await this.userService.getOwnedGames(id);
-
-    return { user, games };
+    try {
+      const user = await this.userService.getPlayerSummaries(id);
+      console.log('User data:', user);
+      // const games = await this.userService.getOwnedGames(id);
+      // console.log('Games data:', games);
+      const stat = await this.userService.getUserStat(id);
+      console.log('Stat data:', stat);
+      return { user, stat };
+    } catch (error) {
+      console.error('Error in getProfile:', error);
+      throw new InternalServerErrorException('Failed to fetch profile data');
+    }
   }
 
   // 사용자 정보 및 게임 정보 조회
@@ -63,10 +66,16 @@ export class UserController {
     required: true,
     type: 'string',
   })
-  @Get('rank')
+  @Get('stat')
   async getUserRank(@Query('id') id: string) {
-    const ranks = await this.userService.getUserRank(id);
+    const stat = await this.userService.getUserStat(id);
 
-    return { ranks };
+    return { stat };
+  }
+
+  //사용자 검색
+  @Get('search')
+  async serchUser(@Res() res: Response) {
+    // const search = await this.steamService.searchUser;
   }
 }
