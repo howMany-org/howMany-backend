@@ -7,3 +7,5 @@ node_modules/
 *.yml
 
 README.md
+
+seed.ts
