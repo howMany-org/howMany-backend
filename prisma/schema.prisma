@@ -23,8 +23,8 @@ model MbtiAnswer {
   answer        String           @map("answer")
   mbtiQuestion  MbtiQuestion     @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
-  @@index([questionId], name: "FK_mbti_questions_TO_mbti_answers")
-  @@map("mbti_answers")
+  @@index([questionId], name: "FK_mbti_question_TO_mbti_answer")
+  @@map("mbti_answer")
 }
 
 model MbtiGameMapping {
@@ -42,27 +42,27 @@ model MbtiGameMapping {
 model MbtiQuestion {
   id            Int              @id @default(autoincrement()) @map("id")
   question      String           @map("question")
-  mbtiAnswers   MbtiAnswer[]     // MBTI 질문에 대한 답변들
+  mbtiAnswer   MbtiAnswer[]     // MBTI 질문에 대한 답변들
 
-  @@map("mbti_questions")
+  @@map("mbti_question")
 }
 
 model Mbti {
   id               Int            @id @default(autoincrement()) @map("id")
   mbtiType         String         @map("mbti_type")
   description      String         @map("description")
-  mbtiGameMappings MbtiGameMapping[]  // MBTI 유형과 게임 매핑 관계
+  mbtiGameMapping MbtiGameMapping[]  // MBTI 유형과 게임 매핑 관계
 
   @@map("mbti")
 }
 
 model User {
   id              Int       @id @default(autoincrement()) @map("id")
-  steamId         BigInt    @map("steam_id")
+  steamId         BigInt    @map("steam_id") @unique
   steamName       String    @map("steam_name")
   steamJoinDate   DateTime  @map("steam_join_date")
   avatarHash      String?   @map("avatar_hash")
   mbtiType        String?   @map("mbti_type")
 
-  @@map("users")
+  @@map("user")
 }
