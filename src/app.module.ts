@@ -7,6 +7,8 @@ import { MbtiModule } from './mbti/mbti.module';
 import { ConfigModule } from '@nestjs/config';
 import config from './config/configuration'; // 설정 모듈 불러오기
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { UserModule } from './user/user.module';
     ScraperModule,
     MbtiModule,
     UserModule,
+    AuthModule,
+    PrismaModule,
   ],
 })
 export class AppModule {}
