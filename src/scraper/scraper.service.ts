@@ -69,10 +69,9 @@ export class ScraperService {
         '--user-data-dir=/tmp/chrome-profile',
       ],
       executablePath:
-        // process.env.MODE === 'develop'
-        // ? undefined
-        // :
-        '/home/ubuntu/.cache/puppeteer/chrome/linux-127.0.6533.99/chrome-linux64/chrome',
+        process.env.MODE === 'develop'
+          ? undefined
+          : '/home/ubuntu/.cache/puppeteer/chrome/linux-127.0.6533.99/chrome-linux64/chrome',
     });
 
     const page = await browser.newPage();
@@ -133,10 +132,9 @@ export class ScraperService {
       headless: true,
       args: ['--no-sandbox', '--disable-gpu'],
       executablePath:
-        // process.env.MODE === 'develop'
-        // ? undefined
-        // :
-        '/home/ubuntu/.cache/puppeteer/chrome/linux-127.0.6533.99/chrome-linux64/chrome',
+        process.env.MODE === 'develop'
+          ? undefined
+          : '/home/ubuntu/.cache/puppeteer/chrome/linux-127.0.6533.99/chrome-linux64/chrome',
     });
 
     const page = await browser.newPage();
@@ -210,10 +208,9 @@ export class ScraperService {
         '--user-data-dir=/tmp/chrome-profile',
       ],
       executablePath:
-        // process.env.MODE === 'develop'
-        //   ? undefined
-        // :
-        '/home/ubuntu/.cache/puppeteer/chrome/linux-127.0.6533.99/chrome-linux64/chrome',
+        process.env.MODE === 'develop'
+          ? undefined
+          : '/home/ubuntu/.cache/puppeteer/chrome/linux-127.0.6533.99/chrome-linux64/chrome',
     });
 
     const page = await browser.newPage();
