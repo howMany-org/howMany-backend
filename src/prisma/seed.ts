@@ -4,12 +4,6 @@ const prisma = new PrismaClient();
 
 async function main() {
   try {
-    // await prisma.mbtiQuestion.deleteMany({});
-    // await prisma.mbtiAnswer.deleteMany({});
-    // await prisma.game.deleteMany({});
-    // await prisma.mbti.deleteMany({});
-    // await prisma.mbtiGameMapping.deleteMany({});
-    
     // MBTI 질문지 데이터
       const questions = await prisma.mbtiQuestion.createMany({
         data: [

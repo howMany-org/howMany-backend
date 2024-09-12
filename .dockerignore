@@ -1,0 +1,27 @@
+# Node.js 모듈
+# node_modules
+
+# 환경 설정 파일 (로컬 환경에서만 사용되는 경우)
+# .env
+
+# 로그 파일
+*.log
+
+# 테스트 결과
+coverage
+*.test.js
+*.spec.js
+
+# 빌드 결과물
+dist
+
+# Git 관련 파일
+.git
+.gitignore
+
+# Docker 관련 파일
+Dockerfile
+docker-compose.yml
+
+# 기타
+*.md
