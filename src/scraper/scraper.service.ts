@@ -66,12 +66,13 @@ export class ScraperService {
       args: [
         '--no-sandbox',
         '--disable-gpu',
-        '--user-data-dir=/tmp/chrome-profile',
+        '--disable-dev-shm-usage',
+        '--disable-setuid-sandbox',
+        '--disable-features=UseDBus',
+        '--ignore-certificate-errors', // SSL 오류 무시
       ],
-      executablePath:
-        process.env.MODE === 'develop'
-          ? undefined
-          : '/home/ubuntu/.cache/puppeteer/chrome/linux-127.0.6533.99/chrome-linux64/chrome',
+      executablePath: '/usr/bin/google-chrome-stable',
+      ignoreHTTPSErrors: true, // 추가: HTTPS 오류 무시
     });
 
     const page = await browser.newPage();
@@ -130,11 +131,16 @@ export class ScraperService {
   async scrapTopSellerCharts(region: string): Promise<TopSellerDto[]> {
     const browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-gpu'],
-      executablePath:
-        process.env.MODE === 'develop'
-          ? undefined
-          : '/home/ubuntu/.cache/puppeteer/chrome/linux-127.0.6533.99/chrome-linux64/chrome',
+      args: [
+        '--no-sandbox',
+        '--disable-gpu',
+        '--disable-dev-shm-usage',
+        '--disable-setuid-sandbox',
+        '--disable-features=UseDBus',
+        '--ignore-certificate-errors', // SSL 오류 무시
+      ],
+      executablePath: '/usr/bin/google-chrome-stable',
+      ignoreHTTPSErrors: true, // 추가: HTTPS 오류 무시
     });
 
     const page = await browser.newPage();
@@ -205,12 +211,13 @@ export class ScraperService {
       args: [
         '--no-sandbox',
         '--disable-gpu',
-        '--user-data-dir=/tmp/chrome-profile',
+        '--disable-dev-shm-usage',
+        '--disable-setuid-sandbox',
+        '--disable-features=UseDBus',
+        '--ignore-certificate-errors', // SSL 오류 무시
       ],
-      executablePath:
-        process.env.MODE === 'develop'
-          ? undefined
-          : '/home/ubuntu/.cache/puppeteer/chrome/linux-127.0.6533.99/chrome-linux64/chrome',
+      executablePath: '/usr/bin/google-chrome-stable',
+      ignoreHTTPSErrors: true, // 추가: HTTPS 오류 무시
     });
 
     const page = await browser.newPage();
