@@ -78,8 +78,6 @@ export class StaticService {
           .pipe(map((response: AxiosResponse) => response.data)),
       );
       // 필요한 정보만 필터링
-
-      console.log('response', response.ladder);
       const filteredData = response.ladder.map((item) => ({
         rank: parseInt(item.pos) + 1,
         totalPlaytime: item.steam_stats.games.total_playtime_min,
