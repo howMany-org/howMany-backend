@@ -3,6 +3,7 @@ import { firstValueFrom, map } from 'rxjs';
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import config from 'src/config/configuration';
+const puppeteer = require('puppeteer');
 
 const settings = config();
 
@@ -12,8 +13,8 @@ export class UserService {
 
   async getPlayerSummaries(id: string) {
     const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${settings.api.steam}&steamids=${id}`;
+    console.log(settings.api.steam);
     try {
-      console.log(url);
       const response = await firstValueFrom(
         this.httpService
           .get(url)
@@ -21,7 +22,6 @@ export class UserService {
       );
 
       const user = response.response.players[0];
-
       return {
         steamName: user.personaname,
         steamId: user.steamid,
@@ -41,16 +41,91 @@ export class UserService {
   }
 
   async getGamePrice(appId: number) {
-    const url = `https://api.steampowered.com/ISteamEconomy/GetAssetPrices/v1/?key=${settings.api.steam}&appid=${appId}&currency=KRW&language=korean`;
+    const url = `https://store.steampowered.com/api/appdetails?appids=${appId}&cc=kr`;
     try {
       const response = await firstValueFrom(
         this.httpService
           .get(url)
           .pipe(map((response: AxiosResponse) => response.data)),
       );
-      console.log(url);
-      console.log(response);
-      return response;
+
+      const gameData = response[`${appId}`].data;
+
+      if (gameData) {
+        if (!gameData.is_free) {
+          const price = gameData.price_overview.final;
+          console.log(`Price: ${price}`);
+          console.log(price);
+          return price;
+        } else if (gameData.is_free) {
+          // console.log('Price: 무료');
+        } else {
+          console.log('Price information not available');
+        }
+      } else {
+        console.log('No game data found');
+      }
+
+      // const formatPrice(krw: number): string {
+      //   const formattedPrice = Math.floor(krw / 100); // 마지막 두 자리 제거
+      //   return `₩ ${formattedPrice.toLocaleString()}`; // 쉼표 추가
+      // }
+
+      // // 게임이 1000개를 초과하면 가격 계산 로직을 실행하지 않음
+      // let totalPrice = 0;
+      // if (totalGamesCount <= 1000) {
+      //   totalPrice = await Promise.all(
+      //     games.map(async (game) => {
+      //       const price = await this.getGamePrice(game.appid);
+      //       return price;
+      //     }),
+      //   ).then((prices) => prices.reduce((total, price) => total + price, 0));
+      // } else {
+      //   console.log('게임 개수가 1000개를 초과하여 가격 계산을 생략합니다.');
+      // }
+      // 가격 합산
+
+      // const totalPrice = games.reduce((total, game) => {
+      //   const price = this.getGamePrice(game.appid);
+      //   return (total = game.Price);
+      // }, 0);
+      // console.log('Total Price: ', totalPrice);
+      //   const response = await firstValueFrom(
+      //     this.httpService
+      //       .get(url)
+      //       .pipe(map((response: AxiosResponse) => response.data)),
+      //   );
+      //   const gameData = response[`${appId}`].data;
+      //   if (gameData && gameData.price_overview) {
+      //     const price = gameData.price_overview.final_formatted;
+      //     console.log(`Price: ${price}`);
+      //   } else {
+      //     console.log('Price information not available');
+      //   }
+      //   return response;
+    } catch (error) {
+      if (error.response && error.response.status === 500) {
+        console.error(
+          '서버에서 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        );
+      } else {
+        console.log('에러앱 id:', appId);
+        console.error('오류 발생:', error.message);
+      }
+    }
+  }
+
+  async getOwnedGames(id: string) {
+    const url = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${settings.api.steam}&steamid=${id}`;
+    try {
+      const response = await firstValueFrom(
+        this.httpService
+          .get(url)
+          .pipe(map((response: AxiosResponse) => response.data)),
+      );
+      const games = response.response.games;
+      // console.log(games);
+      return games;
     } catch (error) {
       if (error.response && error.response.status === 500) {
         console.error(
@@ -62,61 +137,106 @@ export class UserService {
     }
   }
 
-  // async getOwnedGames(id: string) {
-  //   const url = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${settings.api.steam}&steamid=${id}`;
-  //   try {
-  //     const response = await firstValueFrom(
-  //       this.httpService
-  //         .get(url)
-  //         .pipe(map((response: AxiosResponse) => response.data)),
-  //     );
+  async getPlaytimeInfo(gamelist) {
+    const totalPlaytime = gamelist.reduce((total, game) => {
+      return total + game.playtime_forever;
+    }, 0);
 
-  //     const games = response.response.games;
+    const minimumWagePerHour = 10030; // 10,030원 (2024년 기준 한국 최저임금)
+    const sleepHoursPerDay = 8; // 평균적으로 하루에 자는 시간 (시간 단위)
 
-  //     const gamesWithPrices = await Promise.all(
-  //       games.map(async (game) => {
-  //         console.log(game.appid);
-  //         // const priceData = await this.getGamePrice(game.appid);
-  //         // return {
-  //         //   appId: game.appid,
-  //         //   playtime: game.playtime_forever,
-  //         //   lastPlayed: game.rtime_last_played,
-  //         //   price: priceData, // 필요한 경우 가격 정보의 특정 필드를 추출하세요.
-  //         // };
-  //       }),
-  //     );
+    const sleepMinutesPerDay = sleepHoursPerDay * 60;
 
-  //     // 가격 합산
-  //     // const totalPrice = gamesWithPrices.reduce(
-  //     //   (sum, game) => sum + game.totalPrice,
-  //     //   0,
-  //     // );
+    const seoulToBusanKm = 325;
+    const seoulToNewYorkKm = 11000;
 
-  //     // console.log('Total Price: ', totalPrice);
-  //     const filteredData = response.response.games.map((game) => ({
-  //       appId: game.appid,
-  //       playtime: game.playtime_forever,
-  //       lastPlayed: game.rtime_last_played,
-  //     }));
+    // 평균 이동 속도 (예: 자동차의 평균 속도)
+    const travelSpeedKmPerHour = 100;
 
-  //     const gamesCount = response.game_count;
+    // 총 플레이 시간을 시간 단위로 환산
+    const totalPlaytimeInHours = totalPlaytime / 60;
 
-  //     return {
-  //       gamesCount,
-  //       // totalPrice,
-  //       games: filteredData,
-  //       // gamesWithPrices,
-  //     };
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 500) {
-  //       console.error(
-  //         '서버에서 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
-  //       );
-  //     } else {
-  //       console.error('오류 발생:', error.message);
-  //     }
-  //   }
-  // }
+    // 서울에서 부산까지 몇 번 이동할 수 있는지 계산
+    const totalTravelDistanceKm = totalPlaytimeInHours * travelSpeedKmPerHour;
+    const busanTrips = Math.floor(totalTravelDistanceKm / seoulToBusanKm);
+
+    // 서울에서 뉴욕까지 몇 번 이동할 수 있는지 계산
+    const newYorkTrips = Math.floor(totalTravelDistanceKm / seoulToNewYorkKm);
+
+    const formatCurrency = (amount: number) => {
+      return amount.toLocaleString('ko-KR') + '원'; // 한국 원화 형식으로 포맷
+    };
+    return {
+      playtime: {
+        totalPlaytime,
+        totalPlaytimeInHours: Math.floor(totalPlaytime / 60) + '시간',
+        jajangCount: Math.floor(totalPlaytime / 3) + '개의 3분 짜장',
+        totalEarnings:
+          formatCurrency(
+            Math.floor((totalPlaytime / 60) * minimumWagePerHour),
+          ) + '(2024년 최저임금기준)',
+        sleepCount:
+          Math.floor(totalPlaytime / sleepMinutesPerDay) + '번의 수면',
+        soeulToBusanTrips: busanTrips + '번의 서울-부산 이동',
+        soeulToNewYorkTrips: newYorkTrips + '번의 서울-뉴욕 이동',
+      },
+    };
+  }
+  catch(error) {
+    if (error.response && error.response.status === 500) {
+      console.error(
+        '서버에서 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+      );
+    } else {
+      console.error('오류 발생:', error.message);
+    }
+  }
+
+  async getScrapData(id: string) {
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-gpu',
+        '--disable-dev-shm-usage',
+        '--disable-setuid-sandbox',
+        '--disable-features=UseDBus',
+        '--ignore-certificate-errors', // SSL 오류 무시
+      ],
+      executablePath:
+        process.env.NODE_ENV === 'development'
+          ? undefined
+          : '/usr/bin/google-chrome-stable',
+      // executablePath: '/usr/bin/google-chrome-stable',
+      ignoreHTTPSErrors: true, // 추가: HTTPS 오류 무시
+    });
+
+    const page = await browser.newPage();
+    try {
+      await page.goto(`https://steamcommunity.com/profiles/${id}`, {});
+
+      const levelSelector =
+        '#responsive_page_template_content > div.no_header.profile_page > div.profile_header_bg > div > div > div > div.profile_header_badgeinfo > div.profile_header_badgeinfo_badge_area > a > div > div > span';
+
+      // 해당 요소에서 레벨 데이터 추출
+      const level = await page.$eval(
+        levelSelector,
+        (element) => element.innerText,
+      );
+
+      const headers = {
+        level,
+        profileId: id,
+      };
+
+      return headers; // 추출한 데이터를 반환
+    } catch (error) {
+      console.error('Error scraping data:', error);
+      return null; // 오류 발생 시 null 반환
+    } finally {
+      await browser.close(); // 브라우저 종료
+    }
+  }
 
   async getUserStat(id: string) {
     const url = `https://steamladder.com/api/v1/profile/${id}`;
@@ -130,6 +250,7 @@ export class UserService {
           .get(url, { headers })
           .pipe(map((response: AxiosResponse) => response.data)),
       );
+      console.log(response);
 
       const user = response.steam_stats;
       const stats = user;
@@ -194,6 +315,9 @@ export class UserService {
     }
   }
 }
+
+// async calculateUserStat()
+
 //   async getUserStat(id: string) {
 //     const url = `https://steamladder.com/api/v1/profile/${id}`;
 
