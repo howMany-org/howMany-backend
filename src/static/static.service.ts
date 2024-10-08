@@ -6,6 +6,7 @@ import { CacheService } from 'src/cache/cache.service';
 
 import config from '../config/configuration'; // 설정 모듈 불러오기
 import {
+  BroadcastsDto,
   MostPlayedDto,
   TopGamesOwnerDto,
   TopPlayTimeUserDto,
@@ -139,7 +140,7 @@ export class StaticService {
     }
   }
 
-  async getBroadcasts(): Promise<{ cachedCharts: string }> {
+  async getBroadcasts(): Promise<BroadcastsDto[]> {
     try {
       //캐시에서 데이터 가져오기
       const cachedCharts = await this.cacheService.get(`broadcasts`);

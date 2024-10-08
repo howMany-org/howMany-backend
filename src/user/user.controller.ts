@@ -20,9 +20,9 @@ import { ProfileDto } from './dto/\bprofile.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // 사용자 정보 및 게임 정보 조회
+  // 사용자 프로필 조회
   @ApiOperation({
-    summary: 'getUserInfo API',
+    summary: 'getUserProfile API',
     description: '사용자의 프로필 정보와 소유 게임 목록을 조회하는 API',
   })
   @ApiOkResponse({
@@ -39,38 +39,43 @@ export class UserController {
   async getProfile(@Query('id') id: string) {
     try {
       const user = await this.userService.getPlayerSummaries(id);
-      console.log('User data:', user);
-      // const games = await this.userService.getOwnedGames(id);
-      // console.log('Games data:', games);
-      const stat = await this.userService.getUserStat(id);
-      console.log('Stat data:', stat);
-      return { user, stat };
+      const gamelist = await this.userService.getOwnedGames(id);
+      const totalPlayetime = await this.userService.getPlaytimeInfo(gamelist);
+
+      const totalPrice = await gamelist.reduce(
+        async (totalPricePromise, game) => {
+          const totalPrice = await totalPricePromise; // 이전 가격을 기다림
+          const price = await this.userService.getGamePrice(game.appid); // 가격을 비동기적으로 가져옴
+          return totalPrice + price; // 누적된 가격 반환
+        },
+        Promise.resolve(0),
+      );
+
+      return {
+        user,
+        totalPlayetime,
+        totalGamesCount: gamelist.length,
+        totalPrice,
+        gamelist,
+      };
     } catch (error) {
       console.error('Error in getProfile:', error);
       throw new InternalServerErrorException('Failed to fetch profile data');
     }
   }
 
-  // 사용자 정보 및 게임 정보 조회
-  @ApiOperation({
-    summary: 'getUserInfo API',
-    description: '사용자의 rank 정보를 불러오는 API',
-  })
-  @ApiOkResponse({
-    description: 'OK',
-    type: ProfileDto,
-  })
-  @ApiQuery({
-    name: 'id',
-    description: 'user의 id정보',
-    required: true,
-    type: 'string',
-  })
-  @Get('stat')
-  async getUserRank(@Query('id') id: string) {
-    const stat = await this.userService.getUserStat(id);
+  // // 사용자 정보 스크래핑
+  // @Get('scrapData')
+  // async getUserScrapData(@Query('id') id: string) {
+  //   const level = await this.userService.getScrapData(id);
+  //   return level;
+  // }
 
-    return { stat };
+  // 사용자 정보 스크래핑
+  @Get('level')
+  async getUserLevel(@Query('id') id: string) {
+    const level = await this.userService.getScrapData(id);
+    return level;
   }
 
   //사용자 검색

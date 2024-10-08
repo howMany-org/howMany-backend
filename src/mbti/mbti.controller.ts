@@ -8,7 +8,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { MbtiService } from './mbti.service';
-import { AnswersDto } from './dto/answers.dto';
+import { AnswersDto } from './dto/mbti.dto';
 import {
   ApiBody,
   ApiTags,

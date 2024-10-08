@@ -22,13 +22,25 @@ export class AuthController {
   @Get('return')
   @UseGuards(AuthGuard('steam'))
   async return(@Req() req: Request, @Res() res: Response) {
-    // const profile = await this.authService.validateUser(req);
-    // const steamId = profile.user._json.steamid;
-    // console.log(steamId);
+    try {
+      const profile = await this.authService.validateUser(req);
 
-    // Steam ID를 쿼리 파라미터로 포함하여 리다이렉트
-    res.redirect(`/api/v1/auth/`);
-    // res.redirect(`/api/v1/user/profile?id=${steamId}`);
+      const steamId =
+        profile?.steamid ||
+        profile?.user?.steamid ||
+        profile?.user?._json?.steamid;
+
+      if (!steamId) {
+        throw new Error('Steam ID not found in the profile object');
+      }
+
+      // Steam ID를 쿼리 파라미터로 포함하여 리다이렉트
+      res.redirect(`/api/v1/user/profile?id=${steamId}`);
+    } catch (error) {
+      res
+        .status(500)
+        .send('An error occurred during the authentication process.');
+    }
   }
 
   @Get('')
