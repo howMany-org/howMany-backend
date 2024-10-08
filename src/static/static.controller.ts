@@ -8,6 +8,7 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import {
+  BroadcastsDto,
   MostPlayedDto,
   TopGamesOwnerDto,
   TopPlayTimeUserDto,
@@ -155,7 +156,7 @@ export class StaticContoller {
   @ApiOkResponse({
     status: 200,
     description: 'OK',
-    type: TopGamesOwnerDto,
+    type: BroadcastsDto,
   })
   @ApiQuery({
     name: 'limit',
@@ -164,7 +165,7 @@ export class StaticContoller {
     type: 'number',
   })
   @Get('broadcasts')
-  async getBroadcasts(@Query() query: LimitQueryDto) {
+  async getBroadcasts(@Query() query: LimitQueryDto): Promise<BroadcastsDto[]> {
     return await this.staticService.getBroadcasts();
   }
 }
