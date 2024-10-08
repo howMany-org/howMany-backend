@@ -44,6 +44,24 @@ export class MostPlayedDto {
       'https://shared.akamai.steamstatic.com//store_item_assets/steam/apps/730/capsule_231x87.jpg?t=1719426374',
   })
   imageUrl: string;
+
+  @ApiProperty({
+    description: '게임의 접속자수 변화',
+    example: 1,
+  })
+  playerChange: string;
+
+  @ApiProperty({
+    description: '게임의 순위변화',
+    example: 1,
+  })
+  rankChange: string;
+
+  @ApiProperty({
+    description: '새로운 차트여부',
+    example: 1,
+  })
+  newChart: boolean;
 }
 
 export class TopSellerDto {
@@ -69,7 +87,7 @@ export class TopSellerDto {
     description: '이전 주와 비교한 순위 변화',
     example: '▲ 17',
   })
-  change: string;
+  ranckChange: string;
 
   @ApiProperty({
     description: '탑 100에 머문 주 수',
@@ -174,7 +192,7 @@ export class BroadcastsDto {
 
   @ApiProperty({
     description: '시청자수 정보',
-    example: '2,486 viewers',
+    example: '2,486',
   })
   viewers: string;
 
@@ -185,14 +203,28 @@ export class BroadcastsDto {
   title: string;
 
   @ApiProperty({
-    description: '방송자 정보',
+    description: '방송인 정보',
     example: 'Intuition',
   })
   streamerInfo: string;
 
   @ApiProperty({
-    description: '방송자 프로필 링크',
+    description: '방송인 프로필 링크',
     example: 'https://steamcommunity.com/profiles/76561198936960354/',
   })
   streamerInfoLink: string;
+
+  @ApiProperty({
+    description: '방송인 아바타 URL',
+    example:
+      'https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg',
+  })
+  avatarUrl: string;
+
+  @ApiProperty({
+    description: '방송 썸네일 URL',
+    example:
+      'https://steambroadcast.akamaized.net/broadcast/76561199651133947/665924553976484462/thumbnail/?broadcast_origin=ext3-fra2.steamserver.net',
+  })
+  thumbnailUrl: string;
 }
