@@ -64,6 +64,7 @@ model User {
   steamJoinDate   DateTime  @map("steam_join_date")
   avatarHash      String?   @map("avatar_hash")
   mbtiType        String?   @map("mbti_type")
-
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
   @@map("user")
 }
