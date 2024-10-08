@@ -44,16 +44,12 @@ COPY . .
 RUN mkdir -p /usr/src/app/dist/prisma && cp src/prisma/schema.prisma /usr/src/app/dist/prisma/schema.prisma
 RUN npx prisma generate --schema=/usr/src/app/dist/prisma/schema.prisma
 
-# Prisma 시드 스크립트 실행
-# 'src/prisma/seed.ts' 대신 'dist/prisma/seed.js'를 사용해야 할 수 있습니다.
-RUN npx ts-node src/prisma/seed.ts --schema=/usr/src/app/dist/prisma/schema.prisma
-
 # Puppeteer-core 설치
 RUN npm install puppeteer-core
 
 USER node
 
-EXPOSE 8080
+EXPOSE 443
 
 ###################
 # PRODUCTION
@@ -82,5 +78,6 @@ RUN apt-get update && apt-get install -y \
     && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list' \
     && apt-get update \
     && apt-get install -y google-chrome-stable
+    # && apt-get remove --purge -y dbus dbus-x11 # D-Bus 제거
 
 CMD [ "node", "dist/main.js" ]
