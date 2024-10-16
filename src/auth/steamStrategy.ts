@@ -15,9 +15,9 @@ export class SteamStrategy extends PassportStrategy(Strategy) {
   ) {
     // console.log('API Key:', settings.api.steam); // API 키 출력
     super({
-      returnURL: 'http://35.216.113.213:443/api/v1/auth/return',
+      returnURL: 'https://local-proxy-434506-n2.firebaseapp.com/',
       // returnURL: 'http://localhost:443/api/v1/auth/return',
-      realm: 'http://35.216.113.213:443/',
+      realm: 'https://local-proxy-434506-n2.firebaseapp.com/',
       // realm: 'http://localhost:443/',
       apiKey: settings.api.steam,
     });
